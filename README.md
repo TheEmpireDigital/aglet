@@ -19,7 +19,7 @@ MovieDB is a modern web application for browsing, searching, and saving favorite
 ### Installation
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
+   git clone git@github.com:TheEmpireDigital/aglet.git
    cd aglet
    ```
 2. **Install PHP dependencies:**
