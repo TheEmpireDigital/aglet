@@ -45,10 +45,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateFavoriteButton(button, isFavorite) {
         button.innerHTML = svgHeart(isFavorite) + (isFavorite ? 'Saved' : 'Save');
-        button.classList.toggle('bg-green-600', isFavorite);
-        button.classList.toggle('hover:bg-green-700', isFavorite);
-        button.classList.toggle('bg-indigo-600', !isFavorite);
-        button.classList.toggle('hover:bg-indigo-700', !isFavorite);
+        // Remove all possible gradient classes first
+        button.classList.remove(
+            'bg-gradient-to-r',
+            'from-yellow-400', 'to-orange-500', 'hover:from-yellow-500', 'hover:to-orange-600',
+            'from-indigo-500', 'to-pink-500', 'hover:from-indigo-600', 'hover:to-pink-600'
+        );
+        if (isFavorite) {
+            button.classList.add(
+                'bg-gradient-to-r',
+                'from-yellow-400', 'to-orange-500',
+                'hover:from-yellow-500', 'hover:to-orange-600'
+            );
+        } else {
+            button.classList.add(
+                'bg-gradient-to-r',
+                'from-indigo-500', 'to-pink-500',
+                'hover:from-indigo-600', 'hover:to-pink-600'
+            );
+        }
         button.setAttribute('data-is-favorite', isFavorite ? '1' : '0');
     }
 

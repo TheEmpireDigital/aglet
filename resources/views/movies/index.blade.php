@@ -20,11 +20,15 @@
             <p class="text-xl text-gray-200 mb-8 drop-shadow-lg">Search for your favorite movies and add them to your watchlist</p>
             <!-- Search Form -->
             <form id="searchForm" class="max-w-2xl mx-auto mb-0">
-                <div class="flex">
-                    <input type="text" id="searchInput" name="query"
-                           class="flex-1 min-w-0 block w-full px-3 py-3 rounded-l-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/90 placeholder-gray-700 text-gray-900"
-                           placeholder="Search for a movie..." required>
-                    <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-r-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <div class="flex bg-white/80 rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                    <div class="relative flex-1">
+                        <input type="text" id="searchInput" name="query"
+                               class="peer block w-full px-4 pt-6 pb-2 bg-transparent text-gray-900 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 transition-all duration-200" 
+                               placeholder="Search for a movie..." required />
+                        <label for="searchInput" class="absolute left-4 top-2 text-gray-500 text-sm transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-indigo-600">Search for a movie...</label>
+                    </div>
+                    <button type="submit" class="inline-flex items-center px-6 py-3 border-0 text-base font-semibold rounded-none rounded-r-xl text-white bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 transition-all duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         Search
                     </button>
                 </div>
