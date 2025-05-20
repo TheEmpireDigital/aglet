@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SearchMoviesRequest extends FormRequest
@@ -17,7 +18,7 @@ class SearchMoviesRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -26,11 +27,11 @@ class SearchMoviesRequest extends FormRequest
             'page' => 'sometimes|integer|min:1|max:500',
         ];
     }
-    
+
     /**
      * Prepare the data for validation.
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'query' => trim($this->query('query', '')),

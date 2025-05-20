@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FavoriteMovieRequest;
 use App\Models\Movie;
-use App\Models\UserFavorite;
 use App\Services\TmdbService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 class FavoriteController extends Controller
 {
@@ -21,9 +23,9 @@ class FavoriteController extends Controller
     /**
      * Display the favorites page.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $favorites = auth()->user()->favoriteMovies()->with('movie')->get();
         return view('favorites.index', compact('favorites'));
@@ -32,11 +34,11 @@ class FavoriteController extends Controller
     /**
      * Add a movie to user's favorites.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $movie
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function store(Request $request, $movie)
+    public function store(Request $request, $movie): JsonResponse
     {
         $user = auth()->user();
         $movieRecord = Movie::where('tmdb_id', $movie)->first();
@@ -63,11 +65,11 @@ class FavoriteController extends Controller
     /**
      * Remove a movie from user's favorites.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $movie
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function destroy(Request $request, $movie)
+    public function destroy(Request $request, $movie): JsonResponse
     {
         $user = auth()->user();
         $user->favoriteMovies()->detach($movie);

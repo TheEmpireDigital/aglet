@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const notification = document.createElement('div');
         notification.id = 'notification';
         notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-md shadow-lg text-white ${
-            type === 'success' ? 'bg-green-500' : 
-            type === 'error' ? 'bg-red-500' : 
+            type === 'success' ? 'bg-green-500' :
+            type === 'error' ? 'bg-red-500' :
             'bg-blue-500'
         }`;
         notification.innerHTML = `
@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data = await response.json();
             } catch (e) {
                 data = {};
+                console.error(e);
             }
             if (!response.ok) {
                 showNotification(data.message || 'An error occurred. Please try again.', 'error');
@@ -119,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error:', error);
-            // Notification already shown above
         })
         .finally(() => {
             button.disabled = false;
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// --- Search Movies JS (moved from search-movies.js) ---
+// --- Search Movies JS ---
 (function() {
     // Get DOM elements
     const searchForm = document.querySelector('#searchForm');
@@ -137,12 +137,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const moviesGrid = document.querySelector('#moviesGrid');
     const moviesTitle = document.querySelector('#moviesTitle');
     const pagination = document.querySelector('#pagination');
-    
+
     if (!searchForm || !searchInput || !moviesContainer || !loadingIndicator || !moviesGrid || !moviesTitle || !pagination) {
         // Not on the movies index page
         return;
     }
-    
+
     let currentPage = 1;
     let totalPages = 1;
     let currentQuery = '';
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show loading indicator
         loadingIndicator.classList.remove('hidden');
         moviesContainer.classList.add('hidden');
-        
+
         // Make API request
         fetch(`/movies/search?query=${encodeURIComponent(query)}&page=${page}`)
             .then(response => {
@@ -198,11 +198,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadingIndicator.classList.add('hidden');
             });
     }
-    
+
     // Display search results
     function displaySearchResults(data) {
         moviesGrid.innerHTML = '';
-        
+
         if (data.results.length === 0) {
             moviesGrid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-8">No movies found. Try a different search term.</p>';
             moviesTitle.textContent = 'No Results Found';
@@ -212,29 +212,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 const movieCard = createMovieCard(movie);
                 moviesGrid.appendChild(movieCard);
             });
-            
+
             // Update pagination
             updatePagination(data.page, data.total_pages);
-            
+
             // Update title
             moviesTitle.textContent = 'Search Results';
         }
-        
+
         // Show movies container
         moviesContainer.classList.remove('hidden');
     }
-    
+
     // Create movie card element
     function createMovieCard(movie) {
         const movieCard = document.createElement('div');
         movieCard.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300';
-        
-        const posterPath = movie.poster_path 
+
+        const posterPath = movie.poster_path
             ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
             : 'https://via.placeholder.com/500x750?text=No+Poster';
-            
+
         const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
-        
+
         movieCard.innerHTML = `
             <img src="${posterPath}" alt="${movie.title}" class="w-full h-96 object-cover">
             <div class="p-4">
@@ -249,20 +249,20 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         return movieCard;
     }
-    
+
     // Update pagination
     function updatePagination(currentPage, totalPages) {
         if (totalPages <= 1) {
             pagination.innerHTML = '';
             return;
         }
-        
+
         let paginationHtml = '<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">';
-        
+
         // Previous button
         const prevDisabled = currentPage === 1 ? 'opacity-50 cursor-not-allowed' : '';
         paginationHtml += `
-            <button ${currentPage === 1 ? 'disabled' : ''} 
+            <button ${currentPage === 1 ? 'disabled' : ''}
                     class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${prevDisabled}"
                     onclick="window.currentPage = ${currentPage - 1}; searchMovies('${currentQuery}', ${currentPage - 1});">
                 <span class="sr-only">Previous</span>
@@ -270,18 +270,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                 </svg>
             </button>`;
-        
+
         // Page numbers
         const maxPagesToShow = 5;
         let startPage, endPage;
-        
+
         if (totalPages <= maxPagesToShow) {
-            startPage = 1;
-            endPage = totalPages;
-        
             const maxPagesBeforeCurrent = Math.floor(maxPagesToShow / 2);
             const maxPagesAfterCurrent = Math.ceil(maxPagesToShow / 2) - 1;
-            
+
             if (currentPage <= maxPagesBeforeCurrent) {
                 startPage = 1;
                 endPage = maxPagesToShow;
@@ -293,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 endPage = currentPage + maxPagesAfterCurrent;
             }
         }
-        
+
         // First page
         if (startPage > 1) {
             paginationHtml += `
@@ -301,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         onclick="window.currentPage = 1; searchMovies('${currentQuery}', 1);">
                     1
                 </button>`;
-            
+
             if (startPage > 2) {
                 paginationHtml += `
                     <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
@@ -309,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </span>`;
             }
         }
-        
+
         // Page numbers
         for (let i = startPage; i <= endPage; i++) {
             const activeClass = i === currentPage ? 'bg-indigo-50 border-indigo-500 text-indigo-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50';
@@ -319,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ${i}
                 </button>`;
         }
-        
+
         // Last page
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) {
@@ -328,14 +325,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         ...
                     </span>`;
             }
-            
+
             paginationHtml += `
                 <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                         onclick="window.currentPage = ${totalPages}; searchMovies('${currentQuery}', ${totalPages});">
                     ${totalPages}
                 </button>`;
         }
-        
+
         // Next button
         const nextDisabled = currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : '';
         paginationHtml += `
@@ -347,12 +344,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                 </svg>
             </button>`;
-        
+
         paginationHtml += '</nav>';
         pagination.innerHTML = paginationHtml;
     }
-    
+
     // Make searchMovies available globally for pagination
     window.searchMovies = searchMovies;
     window.currentPage = currentPage;
-})(); 
+})();

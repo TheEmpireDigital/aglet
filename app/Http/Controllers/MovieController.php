@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SearchMoviesRequest;
 use App\Models\Movie;
 use App\Services\TmdbService;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class MovieController extends Controller

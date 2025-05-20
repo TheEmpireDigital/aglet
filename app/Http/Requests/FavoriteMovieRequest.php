@@ -27,11 +27,11 @@ class FavoriteMovieRequest extends FormRequest
             'poster_path' => 'nullable|string|max:255',
         ];
     }
-    
+
     /**
      * Prepare the data for validation.
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'tmdb_id' => $this->route('movie'),
